@@ -155,16 +155,15 @@ app.get('/fetch/instagram', function (req, res) {
     });
     res.send('fetching data');
   });
+});
 
-  app.get('/locations', function(req, res) {
-    Location.find({}, function(err, locations) {
-      if (err) {
-        return res.send('No locations found')
-      }
-      return res.send(locations);
-    });
+app.get('/locations', function(req, res) {
+  Location.find({}, function(err, locations) {
+    if (err) {
+      return res.send('No locations found')
+    }
+    return res.send(locations);
   });
-
 });
 
 app.listen(config.port, function() {
