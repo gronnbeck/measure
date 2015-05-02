@@ -15,7 +15,7 @@ class MeasureMap extends React.Component {
 
   componentDidMount() {
     var query = new LocationsQuery();
-    query.query((locations) => {
+    query.query().then((locations) => {
       this.setState({
         locations: locations.map(
           (l) => new Coordinates(l.latitude, l.longitude))
