@@ -2,9 +2,9 @@ var gulp = require('gulp');
 var babel = require('gulp-babel');
 var nodemon = require('gulp-nodemon');
 var browserify = require('browserify');
-var reactify = require("reactify");
 var babelify = require('babelify');
 var source = require('vinyl-source-stream');
+var template = require('gulp-template');
 
 var errorHandler = function(error) {
     console.log('Error!');
@@ -16,6 +16,13 @@ gulp.task('build', function () {
       .pipe(babel())
       .pipe(gulp.dest('build/server'));
 });
+
+gulp.task('templates', function () {
+  gulp.src('templates/**/*.html')
+    .pipe(template({ GOOGLE_MAPS_APIKEY: process.env.GOOGLE_MAPS_APIKEY }))
+    .pipe(gulp.dest('build/public'));
+});
+
 
 gulp.task('frontend', function () {
   var options = {
@@ -42,6 +49,7 @@ gulp.task('service', function () {
 gulp.task('watch', function () {
   gulp.watch(['src/server/**/*.js'], ['build']);
   gulp.watch(['src/app/**/*.js'], ['frontend']);
+  gulp.watch(['templates/**/*.html'], ['templates']);
 });
 
-gulp.task('dev', ['build', 'frontend', 'watch', 'service'])
+gulp.task('dev', ['build', 'templates', 'frontend', 'watch', 'service'])

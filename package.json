@@ -18,6 +18,8 @@
     "passport": "^0.2.1",
     "passport-instagram": "^0.1.2",
     "react": "^0.13.2",
+    "react-googlemaps": "^0.4.0",
+    "reactify": "^1.1.0",
     "superagent": "^1.2.0"
   },
   "devDependencies": {
@@ -28,6 +30,8 @@
     "gulp-babel": "^5.1.0",
     "gulp-browserify": "^0.5.1",
     "gulp-reactify": "^2.0.0",
+    "gulp-template": "^3.0.0",
+    "gulp-util": "^3.0.4",
     "reactify": "^1.1.0",
     "vinyl-source-stream": "^1.1.0"
   }
