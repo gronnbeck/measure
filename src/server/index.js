@@ -166,6 +166,9 @@ app.get('/locations', function(req, res) {
   });
 });
 
+app.use('/js', express.static('build/app'))
+app.use('/', express.static('templates'));
+
 app.listen(config.port, function() {
   logger.message('Server is running at port ' + config.port);
 });
