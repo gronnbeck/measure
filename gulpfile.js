@@ -12,7 +12,7 @@ var errorHandler = function(error) {
 }
 
 gulp.task('build', function () {
-  gulp.src('src/server/index.js')
+  gulp.src('src/server/**/*.js')
       .pipe(babel())
       .pipe(gulp.dest('build/server'));
 });

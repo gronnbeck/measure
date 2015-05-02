@@ -4,6 +4,9 @@ var mongoose = require('mongoose');
 var request = require('superagent');
 var passport = require('passport');
 var InstagramStrategy = require('passport-instagram').Strategy;
+var fetch = require('./api/fetch');
+var Location = require('./models/location');
+var logger = require('./utils/logger');
 
 var config = {
   port: 8037,
@@ -11,33 +14,6 @@ var config = {
   INSTAGRAM_CLIENT_SECRET: process.env.INSTAGRAM_CLIENT_SECRET,
   cookieSecret: '123456789',
   mongooseUri: process.env.MONGOLAB_URI
-};
-
-var InstagramEndpoints = function() {
-  this.media = {
-    recent: function(userId, accessToken) {
-      var urlTemplate = 'https://api.instagram.com/v1/users/{user_id}/media/recent/?access_token={access_token}';
-      var url = urlTemplate.replace('{user_id}', userId)
-        .replace('{access_token}', accessToken);
-
-      return url;
-    }
-  }
-
-  return this;
-};
-
-var logger = {
-  message: function(message) {
-    console.log(message);
-  },
-  debug: function(level, message) {
-    if (level != null && message == null) {
-      message = level;
-      level = 'Unknown';
-    }
-    console.log(message);
-  }
 };
 
 mongoose.connect(config.mongooseUri)
@@ -54,17 +30,6 @@ var UserSchema = mongoose.Schema({
 });
 UserSchema.plugin(findOrCreate);
 var User = mongoose.model('User', UserSchema);
-
-var LocationSchema = mongoose.Schema({
-  latitude: Number,
-  longitude: Number,
-  name: String,
-  source: String,
-  id: String,
-  _id: String
-});
-LocationSchema.plugin(findOrCreate);
-var Location = mongoose.model('Location', LocationSchema);
 
 passport.use(new InstagramStrategy({
     clientID: config.INSTAGRAM_CLIENT_ID,
@@ -122,41 +87,8 @@ app.get('/auth/instagram/callback',
     res.redirect('/');
   });
 
-app.get('/fetch/instagram', function (req, res) {
-  var user = req.user;
-  var endpoints = new InstagramEndpoints();
-  var url = endpoints.media.recent(user.instagram.id, user.instagram.token);
-  request
-  .get(url)
-  .end(function(err, result) {
-    if (err) {
-      return res.send('An error occured');
-    }
-    var body = result.text;
-    var json = JSON.parse(body);
-    var data = json.data;
-    var locations = data.map(function(d) {
-      if (d.location == null) return null;
-      return {
-        latitude: d.location.latitude,
-        longitude: d.location.longitude,
-        name: d.location.name,
-        source: 'instagram',
-        id: d.id,
-        _id: 'instagram' + '.' + d.id
-      }
-    });
-    locations.forEach(function(l) {
-      Location.findOrCreate(l, function(err, location) {
-        if (err) {
-          logger.debug('Could not save: ' + err);
-        }
-      });
-    });
-    res.send('fetching data');
-  });
-});
 
+app.use('/fetch', fetch);
 app.get('/locations', function(req, res) {
   Location.find({}, function(err, locations) {
     if (err) {
