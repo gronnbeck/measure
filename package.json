@@ -2,7 +2,7 @@
   "name": "measure",
   "version": "0.0.0",
   "description": "Measure everything",
-  "main": "build/index.js",
+  "main": "build/server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "gulp build"
@@ -22,6 +22,8 @@
   "devDependencies": {
     "babel": "^5.2.6",
     "gulp": "^3.8.11",
-    "gulp-babel": "^5.1.0"
+    "gulp-babel": "^5.1.0",
+    "gulp-browserify": "^0.5.1",
+    "gulp-reactify": "^2.0.0"
   }
 }

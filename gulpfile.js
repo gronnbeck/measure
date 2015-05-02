@@ -3,14 +3,14 @@ var babel = require('gulp-babel');
 var nodemon = require('gulp-nodemon');
 
 gulp.task('build', function () {
-  gulp.src('src/index.js')
+  gulp.src('src/server/index.js')
       .pipe(babel())
-      .pipe(gulp.dest('build'));
+      .pipe(gulp.dest('build/server'));
 });
 
 gulp.task('service', function () {
   nodemon({
-    script: 'build/index.js',
+    script: 'build/server/index.js',
     env: { 'NODE_ENV': 'development' }
   })
 });
