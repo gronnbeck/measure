@@ -1,7 +1,7 @@
 var React = require('react');
 
 var Measure = React.createClass({
-  render: function () {
+  render () {
     return <h1>Hello World</h1>
   }
 });
