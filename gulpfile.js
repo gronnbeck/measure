@@ -3,6 +3,7 @@ var babel = require('gulp-babel');
 var nodemon = require('gulp-nodemon');
 var browserify = require('browserify');
 var reactify = require("reactify");
+var babelify = require('babelify');
 var source = require('vinyl-source-stream');
 
 var errorHandler = function(error) {
@@ -22,7 +23,7 @@ gulp.task('frontend', function () {
   };
 
   var b = browserify(options);
-  b.transform("reactify");
+  b.transform(babelify);
   b.add('./src/app/index.js');
 
   b.bundle()
